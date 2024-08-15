@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const userRouter = require('./src/routes/route');
+const userRouter = require('./src/routes/userRoute');
+const accessControlRouter = require('./src/routes/accessControlRoute');
+const auth = require('./src/middlewares/authentication');
 const app = express();
 
 dotenv.config();
@@ -8,7 +10,8 @@ const port = process.env.PORT;
 
 app.use(express.json());
 
-app.use('/user', userRouter);
+app.use('/user', auth, userRouter);
+app.use('/', accessControlRouter);
 
 app.listen(port, () => {
   console.log("App listening on port: ", port)

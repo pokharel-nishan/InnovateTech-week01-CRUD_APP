@@ -5,7 +5,7 @@
     "password": "radha",
     "firstname": "shree",
     "lastname": "krishna",
-    "role": "user"
+    "role": "admin"
   },
   {
     "id": "e4246b8b-63ad-47f1-8650-ba3a48326423",
@@ -13,7 +13,7 @@
     "password": "9800a",
     "firstname": "nishan",
     "lastname": "pokharel",
-    "role": "user"
+    "role": "admin"
   },
   {
     "id": "80cd431b-afe2-47e6-9a10-c8bb36a2d7d2",
@@ -21,6 +21,6 @@
     "password": "shyam",
     "firstname": "ram",
     "lastname": "shyam",
-    "role": "user"
+    "role": "general_user"
   }
 ]

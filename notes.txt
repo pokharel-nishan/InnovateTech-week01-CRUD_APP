@@ -1,0 +1,55 @@
+- define roles in separate file for authorization
+- define higher order function which is a middleware generator, where we send array of roles
+function - return function, function should be middleware
+
+- rolesGuard([array with roles "", ""]) => return middleware function
+// global exception handler 
+
+- controllers
+- service 
+- data access layer
+
+
+// exception handler express -> error first callback (use) for handling error 
+- error handler middleware -> should catch all custom errors 
+
+// send empty array instead of error 
+
+
+// if (!user){
+  throw new error{
+    status: 234,
+    message: ""
+  }
+}
+
+if status -> status 
+if not status -> status 500 in default
+
+// if error -> handle with error handler middleware
+
+
+
+// if there is not data then we do not need to send the error in if(!users)
+
+
+// if there is no json file, then use seeder to seed the data in json file
+// if there is no array in json file, then also use the seeder
+
+
+// follow branching in git
+// prefix for branch: day or week in branch and then name
+
+// handle the error when reading the file and not when after reading the file
+
+
+// data access layer
+
+
+// validation middleware 
+-> express validator 
+-> non necessary data/properties in body 
+
+
+
+// authorize => generate middleware

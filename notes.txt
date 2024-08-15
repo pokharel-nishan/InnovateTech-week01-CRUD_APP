@@ -53,3 +53,21 @@ if not status -> status 500 in default
 
 
 // authorize => generate middleware
+
+throw new error({
+  status:
+  message: 
+})
+
+// class unauthorizedException extends Error{
+  constructor(message){
+
+  }
+}
+
+throw new unauth..("User is not authorized...")
+
+
+
+// bcrypt hash -> hash in seeder file also
+// use bcrypt for password hashing 

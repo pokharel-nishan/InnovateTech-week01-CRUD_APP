@@ -1,6 +1,7 @@
 const { v4: uuid } = require("uuid");
 const User = require("../dto/user");
 const { readFromFile, writeIntoFile } = require("../data-access/dataAccess");
+const userSeeder = require("../seeders/userSeeder");
 
 function getUsers() {
   const users = readFromFile();

@@ -26,6 +26,10 @@ function writeIntoFile(users) {
   return true;
 }
 
+function seedFile() {
+
+}
+
 module.exports = {
   readFromFile,
   writeIntoFile,

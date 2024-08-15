@@ -5,7 +5,7 @@ function authorize(allowedRoles) {
       console.log(userRole, " : ", allowedRoles);
       return next();
     }
-    return res.status(402).json({ "Message": "Forbidden Request." })
+    return res.status(403).json({ "Message": "Forbidden Request." })
   };
 };
 

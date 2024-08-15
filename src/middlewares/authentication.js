@@ -23,8 +23,9 @@ const auth = (req, res, next) => {
   console.log(verifiedData);
 
   const username = verifiedData.username;
+  const role = verifiedData.role;
   req.user = username;
-
+  req.role = role;
   next()
 }
 

@@ -46,7 +46,7 @@ function addUser(userObj) {
     password,
     firstname,
     lastname,
-    role = "user"
+    role = "general_user"
   );
   users.push(newUser);
   const isSuccess = writeIntoFile(users);

@@ -1,43 +1,32 @@
 const { v4: uuid } = require("uuid");
 const User = require("../dto/user");
 const { readFromFile, writeIntoFile } = require("../data-access/dataAccess");
+const { ResourceNotFound, HttpError } = require("../exceptions/exceptionHandlers");
 
 function getUsers() {
   const users = readFromFile();
   if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
+    throw new ResourceNotFound("No existing users in the system.");
   }
-  return { success: true, data: users };
+  return users;
 }
 
 function getParticularUser(userId) {
   const users = readFromFile();
   if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
-  }
+    throw new ResourceNotFound("No existing users in the system.");
+  };
   const user = users.find(user => user.id === userId);
   if (user) {
-    return { success: true, data: user };
+    return user;
   }
-  return {
-    success: false,
-    message: "User not found.",
-  };
+  throw new ResourceNotFound("User Not Found.");
 }
 
 function addUser(userObj) {
   let users = readFromFile();
   if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
+    throw new ResourceNotFound("No existing users in the system.");
   }
   const { username, password, firstname, lastname } = userObj;
   let newUser = new User(
@@ -51,22 +40,16 @@ function addUser(userObj) {
   users.push(newUser);
   const isSuccess = writeIntoFile(users);
   if (!isSuccess) {
-    return {
-      success: false,
-      message: "Error occurred while creating user. Please try again.",
-    };
+    throw new HttpError("Problem writing into the file.")
   }
-  return { success: true, data: newUser };
+  return newUser;
 }
 
 function fullUpdate(id, data) {
   const users = readFromFile();
   if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
-  }
+    throw new ResourceNotFound("No existing users in the system.");
+  };
   const { username, password, firstname, lastname } = data;
   let updatedUser;
   users.forEach((user) => {
@@ -81,28 +64,19 @@ function fullUpdate(id, data) {
   });
   const isSuccess = writeIntoFile(users);
   if (!isSuccess) {
-    return {
-      success: false,
-      message: "Error occurred while updating user. Please try again.",
-    };
+    throw new HttpError("Problem writing into the file.")
   }
-  return { success: true, data: updatedUser };
+  return updatedUser;
 }
 
 function partialUpdate(userId, data) {
   const users = readFromFile();
   if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
-  }
+    throw new ResourceNotFound("No existing users in the system.");
+  };
   const userIndex = users.findIndex(user => user.id === userId);
   if (userIndex === -1) {
-    return {
-      success: false,
-      message: "User not found.",
-    };
+    throw new ResourceNotFound("User Not Found.")
   }
 
   users[userIndex] = {
@@ -111,22 +85,16 @@ function partialUpdate(userId, data) {
   };
   const isSuccess = writeIntoFile(users);
   if (!isSuccess) {
-    return {
-      success: false,
-      message: "Error occurred while updating user. Please try again.",
-    };
+    throw new HttpError("Problem writing into the file.")
   }
-  return { success: true, data: users[userIndex] };
+  return users[userIndex];
 }
 
 function deleteUser(userId) {
   const users = readFromFile();
   if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
-  }
+    throw new ResourceNotFound("No existing users in the system.");
+  };
   let deletedUser;
   users.forEach((user) => {
     if (userId === user.id) {
@@ -134,22 +102,16 @@ function deleteUser(userId) {
     }
   });
   if (!deletedUser) {
-    return {
-      success: false,
-      message: "User does not exist.",
-    };
+    throw new ResourceNotFound("User Not Found.");
   }
   const remainingUsers = users.filter((user) => {
     return user.id !== userId;
   });
   const isSuccess = writeIntoFile(remainingUsers);
   if (!isSuccess) {
-    return {
-      success: false,
-      message: "Error occurred while deleting user. Please try again.",
-    };
+    throw new HttpError("Problem writing into the file.")
   }
-  return { success: true, data: deletedUser };
+  return deletedUser;
 }
 
 module.exports = {

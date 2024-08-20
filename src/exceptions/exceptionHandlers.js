@@ -1,53 +1,46 @@
-class ClientError extends Error {
-  constructor(message = "Client Error", status = 400) {
+class ServerError extends Error {
+  constructor(message = "Server Error", status = 500) {
     super(message);
     this.status = status;
-    this.name = this.constructor.name;
   }
 }
 
-class BadRequest extends ClientError {
+class HttpError extends Error {
+  constructor(message = "Client Error", status = 400) {
+    super(message);
+    this.status = status;
+  }
+}
+
+class BadRequest extends HttpError {
   constructor(message = "Bad Request", status = 400) {
     super(message, status);
   }
 }
 
-class UnauthorizedException extends ClientError {
+class UnauthorizedException extends HttpError {
   constructor(message = "Unauthorized Exception", status = 401) {
     super(message, status);
   }
 }
 
-class ResourceForbiden extends ClientError {
+class ResourceForbiden extends HttpError {
   constructor(message = "Forbidden Resource", status = 403) {
     super(message, status);
   }
 }
 
-class ResourceNotFound extends ClientError {
+class ResourceNotFound extends HttpError {
   constructor(message = "Resource Not Found", status = 404) {
     super(message, status);
   }
 }
 
 module.exports = {
-  ClientError,
+  ServerError,
+  HttpError,
   BadRequest,
   UnauthorizedException,
   ResourceForbiden,
   ResourceNotFound,
 };
-
-/*
-class HttpError extends Error {
-  constructor(status = 500, message) {
-    super(message, status)
-  }
-}
-
-class UnauthorizedError extends HttpError {
-  constructor(message) {
-    super(401, message = "Unauthorized Error")
-  }
-}
-*/

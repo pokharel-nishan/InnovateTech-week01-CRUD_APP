@@ -81,8 +81,58 @@ throw new unauth..("User is not authorized...")
 - Enum 
 - Utility functions
 - 
+- MVC architecture
+
+- JWT vs session 
+- Stateful and stateless backend systems. 
+
+
+- socket and queuing
+- ORM 
+- RPC  
+
+- socket -> full flow, full description. 
 
 ES6 vs common JS module
 - imports vs require
 - ES6 added functionalities 
 - CJS, AMD, UMD, ESM
+
+
+
+- clean services layer and throw custom exception
+- bcrypt 
+- Database connectivity 
+
+- jsdocs - swagger. 
+- swagger express UI 
+
+
+if username not found{
+- return {
+  status: 
+  message: 
+}
+}
+
+throw new notFoundException();
+
+
+- exception 
+
+- if I am a user, I only should be able to update my data. 
+
+
+
+- dto -> getter method -> get user full name 
+
+
+- try{
+
+}
+catch{
+
+}
+
+// JSON parse in seeder file -> seed file validate 
+

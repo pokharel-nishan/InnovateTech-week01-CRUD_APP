@@ -1,11 +1,14 @@
+const { UnauthorizedException } = require("../exceptions/clientError");
+
 function authorize(allowedRoles) {
   return (req, res, next) => {
     const userRole = req.role;
+    abc;
     if (allowedRoles.includes(userRole)) {
       console.log(userRole, " : ", allowedRoles);
       return next();
     }
-    return res.status(403).json({ "Message": "Forbidden Request." })
+    throw new UnauthorizedException()
   };
 };
 

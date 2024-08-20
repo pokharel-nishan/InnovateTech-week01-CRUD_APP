@@ -71,3 +71,18 @@ throw new unauth..("User is not authorized...")
 
 // bcrypt hash -> hash in seeder file also
 // use bcrypt for password hashing 
+
+
+
+// OOP  (Maintain docs)
+// Typescript - OOP concepts 
+- Extends vs implement
+- type vs interface 
+- Enum 
+- Utility functions
+- 
+
+ES6 vs common JS module
+- imports vs require
+- ES6 added functionalities 
+- CJS, AMD, UMD, ESM

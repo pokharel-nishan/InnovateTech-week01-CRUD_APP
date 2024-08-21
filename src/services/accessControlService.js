@@ -1,19 +1,24 @@
 const jwt = require("jsonwebtoken");
-const { readFromFile } = require("../data-access/dataAccess");
 const { ResourceNotFound, BadRequest } = require("../exceptions/exceptionHandlers");
+const User = require("../models/userModel");
+const { compare } = require("../common/encryption");
 
-function verifyAccess(credentials) {
+async function verifyAccess(credentials) {
   const { username, password } = credentials;
 
-  const users = readFromFile();
-
-  const user = users.find(user => user.username === username);
+  console.log(username, password);
+  const user = await User.findOne({
+    where: {
+      username
+    }
+  });
   console.log(user)
   if (!user) {
     throw new ResourceNotFound("User does not exist.")
   }
 
-  if (user.password !== password) {
+  const isValidPassword = compare(password, user.password);
+  if (!isValidPassword) {
     throw new BadRequest("Username and Password do not match.")
   }
 
@@ -22,13 +27,14 @@ function verifyAccess(credentials) {
   console.log("Role: ", user.role)
 
   const payload = {
+    userId: user.id,
     username: username,
     role: user.role
   };
 
   const SECRET_KEY = process.env.SECRET_KEY;
   const token = jwt.sign(payload, SECRET_KEY);
-
+  console.log(token)
   return token;
 }
 

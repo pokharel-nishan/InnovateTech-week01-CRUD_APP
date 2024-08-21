@@ -103,7 +103,7 @@ async function deleteUser(userId) {
   }
   const isSuccess = removeUser(userId);
   if (!isSuccess) {
-    throw new HttpError("")
+    throw new HttpError("Problem deleting the user.")
   }
   return user;
 }

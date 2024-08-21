@@ -1,5 +1,8 @@
 const jwt = require("jsonwebtoken");
-const { ResourceNotFound, BadRequest } = require("../exceptions/exceptionHandlers");
+const {
+  ResourceNotFound,
+  BadRequest,
+} = require("../exceptions/exceptionHandlers");
 const User = require("../models/userModel");
 const { compare } = require("../common/encryption");
 
@@ -9,32 +12,31 @@ async function verifyAccess(credentials) {
   console.log(username, password);
   const user = await User.findOne({
     where: {
-      username
-    }
+      username,
+    },
   });
-  console.log(user)
+  console.log(user);
   if (!user) {
-    throw new ResourceNotFound("User does not exist.")
+    throw new ResourceNotFound("User does not exist.");
   }
 
   const isValidPassword = compare(password, user.password);
   if (!isValidPassword) {
-    throw new BadRequest("Username and Password do not match.")
+    throw new BadRequest("Username and Password do not match.");
   }
 
   console.log(username, " : ", user.username);
   console.log(password, " : ", user.password);
-  console.log("Role: ", user.role)
+  console.log("Role: ", user.role);
 
   const payload = {
     userId: user.id,
-    username: username,
-    role: user.role
+    role: user.role,
   };
 
   const SECRET_KEY = process.env.SECRET_KEY;
   const token = jwt.sign(payload, SECRET_KEY);
-  console.log(token)
+  console.log(token);
   return token;
 }
 

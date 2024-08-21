@@ -6,13 +6,15 @@ const seedFile = path.join(__dirname, "../seeds/userSeed.json");
 
 function userSeeder() {
   try {
-    const seedData = fs.readFileSync(seedFile, 'utf-8'); // read data from seedfile
-    if (!fs.existsSync(dataFile)) { // check if file exists
-      fs.writeFileSync(dataFile, seedData); // write data from seedData into datafile 
+    const seedData = fs.readFileSync(seedFile, "utf-8"); // read data from seedfile
+    if (!fs.existsSync(dataFile)) {
+      // check if file exists
+      fs.writeFileSync(dataFile, seedData); // write data from seedData into datafile
       return;
     }
 
-    if (fs.readFileSync(dataFile).length === 0) { // check if there is data in datafile 
+    if (fs.readFileSync(dataFile).length === 0) {
+      // check if there is data in datafile
       fs.writeFileSync(dataFile, seedData); // write data from seedData into datafile
       return;
     }

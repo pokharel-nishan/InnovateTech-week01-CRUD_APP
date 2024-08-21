@@ -7,8 +7,8 @@ function authorize(allowedRoles) {
       console.log(userRole, " : ", allowedRoles);
       return next();
     }
-    throw new UnauthorizedException("Unauthorized Resource.")
+    throw new UnauthorizedException("Unauthorized Resource.");
   };
-};
+}
 
 module.exports = authorize;

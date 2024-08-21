@@ -1,6 +1,6 @@
-const config = require('../config/databaseConfig.json')['development'];
+const config = require("../config/databaseConfig.json")["development"];
 
-const Sequelize = require('sequelize');
+const Sequelize = require("sequelize");
 
 const sequelize = new Sequelize(
   config.database,
@@ -9,8 +9,8 @@ const sequelize = new Sequelize(
   {
     port: config.port,
     host: config.host,
-    dialect: config.dialect
-  }
+    dialect: config.dialect,
+  },
 );
 
 module.exports = sequelize;

@@ -1,7 +1,17 @@
 const { v4: uuid } = require("uuid");
 const User = require("../dto/user");
-const { getAllUsers, postUser, findParticularUser, updateUser, removeUser } = require("../data-access/dataAccess");
-const { ResourceNotFound, HttpError, BadRequest } = require("../exceptions/exceptionHandlers");
+const {
+  getAllUsers,
+  postUser,
+  findParticularUser,
+  updateUser,
+  removeUser,
+} = require("../data-access/dataAccess");
+const {
+  ResourceNotFound,
+  HttpError,
+  BadRequest,
+} = require("../exceptions/exceptionHandlers");
 const { encrypt } = require("../common/encryption");
 
 async function getUsers() {
@@ -34,11 +44,11 @@ function addUser(userObj) {
     encryptedPassword,
     firstname,
     lastname,
-    role = "user"
+    (role = "user"),
   );
   const isSuccess = postUser(newUser);
   if (!isSuccess) {
-    throw new HttpError("Problem creating the user.")
+    throw new HttpError("Problem creating the user.");
   }
   return newUser;
 }
@@ -50,7 +60,7 @@ async function fullUpdate(userId, data) {
   }
   const user = await findParticularUser(userId);
   if (!user) {
-    throw new ResourceNotFound("User Not Found.")
+    throw new ResourceNotFound("User Not Found.");
   }
 
   const encryptedPassword = encrypt(password);
@@ -61,12 +71,12 @@ async function fullUpdate(userId, data) {
     encryptedPassword,
     firstname,
     lastname,
-    role = "user"
+    (role = "user"),
   );
 
   const isSuccess = updateUser(userId, updateValues);
   if (!isSuccess) {
-    throw new HttpError("Problem writing into the file.")
+    throw new HttpError("Problem writing into the file.");
   }
   return updateValues;
 }
@@ -74,17 +84,17 @@ async function fullUpdate(userId, data) {
 async function partialUpdate(userId, data) {
   const user = await findParticularUser(userId);
   if (!user) {
-    throw new ResourceNotFound("User Not Found.")
+    throw new ResourceNotFound("User Not Found.");
   }
   if (data.password) {
     const password = data.password;
-    encryptedPassword = encrypt(password)
+    encryptedPassword = encrypt(password);
     data.password = encryptedPassword;
   }
   const updateValues = { ...user, ...data };
-  const isSuccess = updateUser(userId, updateValues)
+  const isSuccess = updateUser(userId, updateValues);
   if (!isSuccess) {
-    throw new HttpError("Problem writing into the file.")
+    throw new HttpError("Problem writing into the file.");
   }
 
   const entries = Object.entries(updateValues); // converting object into array
@@ -99,11 +109,11 @@ async function partialUpdate(userId, data) {
 async function deleteUser(userId) {
   const user = await findParticularUser(userId);
   if (!user) {
-    throw new ResourceNotFound("User Not Found.")
+    throw new ResourceNotFound("User Not Found.");
   }
   const isSuccess = removeUser(userId);
   if (!isSuccess) {
-    throw new HttpError("Problem deleting the user.")
+    throw new HttpError("Problem deleting the user.");
   }
   return user;
 }

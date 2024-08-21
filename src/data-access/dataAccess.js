@@ -7,9 +7,8 @@ async function getAllUsers() {
   try {
     const userData = await User.findAll();
     return userData;
-  }
-  catch (err) {
-    throw new ServerError(err.message)
+  } catch (err) {
+    throw new ServerError(err.message);
   }
 }
 
@@ -17,8 +16,8 @@ async function findParticularUser(userId) {
   try {
     const user = await User.findOne({
       where: {
-        userId
-      }
+        userId,
+      },
     });
     return user;
   } catch (err) {
@@ -29,10 +28,9 @@ async function findParticularUser(userId) {
 async function postUser(user) {
   try {
     const newUser = await User.create(user);
-    return true
-  }
-  catch (err) {
-    throw new ServerError(err.message)
+    return true;
+  } catch (err) {
+    throw new ServerError(err.message);
   }
 }
 
@@ -40,23 +38,21 @@ async function updateUser(userId, updateValues) {
   try {
     const updatedUser = await User.update(updateValues, {
       where: {
-        userId
-      }
-    })
-    return true
-  }
-  catch (err) {
-    throw new ServerError(err.message)
+        userId,
+      },
+    });
+    return true;
+  } catch (err) {
+    throw new ServerError(err.message);
   }
 }
 
 async function removeUser(userId) {
   try {
-    const isSuccess = await User.destroy({ where: { userId } })
+    const isSuccess = await User.destroy({ where: { userId } });
     return isSuccess;
-  }
-  catch (err) {
-    throw new ServerError(err.message)
+  } catch (err) {
+    throw new ServerError(err.message);
   }
 }
 
@@ -65,5 +61,5 @@ module.exports = {
   getAllUsers,
   postUser,
   updateUser,
-  removeUser
+  removeUser,
 };

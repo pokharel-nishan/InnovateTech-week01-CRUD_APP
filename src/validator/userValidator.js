@@ -37,7 +37,7 @@ const createUserValidator = validate(validateProperty);
 const fullUserUpdateValidator = validate(validateProperty);
 
 const partialValidateProperty = validateProperty.map((property) =>
-  property.optional()
+  property.optional(),
 );
 const partialUserUpdateValidator = validate(partialValidateProperty);
 

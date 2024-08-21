@@ -7,35 +7,35 @@ const {
   deleteUser,
 } = require("../services/userService");
 
-const findAllUsers = (req, res) => {
-  return res.status(200).json(getUsers());
+const findAllUsers = async (req, res) => {
+  return res.status(200).json(await getUsers());
 };
 
-const findParticularUser = (req, res) => {
+const findParticularUser = async (req, res) => {
   const id = req.params.id;
-  return res.status(200).json(getParticularUser(id));
+  return res.status(200).json(await getParticularUser(id));
 };
 
-const createUser = (req, res) => {
+const createUser = async (req, res) => {
   const userObj = req.body;
-  return res.status(200).json(addUser(userObj));
+  return res.status(200).json(await addUser(userObj));
 };
 
-const fullUserUpdate = (req, res) => {
+const fullUserUpdate = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
-  return res.status(200).json(fullUpdate(id, data));
+  return res.status(200).json(await fullUpdate(id, data));
 };
 
-const partialUserUpdate = (req, res) => {
+const partialUserUpdate = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
-  return res.status(200).json(partialUpdate(id, data));
+  return res.status(200).json(await partialUpdate(id, data));
 };
 
-const removeUser = (req, res) => {
+const removeUser = async (req, res) => {
   const userId = req.params.id;
-  return res.status(200).json(deleteUser(userId));
+  return res.status(200).json(await deleteUser(userId));
 };
 
 module.exports = {

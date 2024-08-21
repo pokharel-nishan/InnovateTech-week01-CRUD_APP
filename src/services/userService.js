@@ -1,22 +1,18 @@
 const { v4: uuid } = require("uuid");
 const User = require("../dto/user");
-const { readFromFile, writeIntoFile } = require("../data-access/dataAccess");
-const { ResourceNotFound, HttpError } = require("../exceptions/exceptionHandlers");
+const { getAllUsers, postUser, findParticularUser, updateUser, removeUser } = require("../data-access/dataAccess");
+const { ResourceNotFound, HttpError, BadRequest } = require("../exceptions/exceptionHandlers");
 
-function getUsers() {
-  const users = readFromFile();
-  if (!users) {
+async function getUsers() {
+  const users = await getAllUsers();
+  if (Object.keys(users).length === 0) {
     throw new ResourceNotFound("No existing users in the system.");
   }
   return users;
 }
 
-function getParticularUser(userId) {
-  const users = readFromFile();
-  if (!users) {
-    throw new ResourceNotFound("No existing users in the system.");
-  };
-  const user = users.find(user => user.id === userId);
+async function getParticularUser(userId) {
+  const user = await findParticularUser(userId);
   if (user) {
     return user;
   }
@@ -24,94 +20,84 @@ function getParticularUser(userId) {
 }
 
 function addUser(userObj) {
-  let users = readFromFile();
-  if (!users) {
-    throw new ResourceNotFound("No existing users in the system.");
+  const { email, username, password, firstname, lastname } = userObj;
+  if (!email || !username || !password || !firstname || !lastname) {
+    throw new BadRequest("Request body is not valid.");
   }
-  const { username, password, firstname, lastname } = userObj;
+  const userId = uuid();
   let newUser = new User(
-    (id = uuid()),
+    userId,
+    email,
     username,
     password,
     firstname,
     lastname,
-    role = "general_user"
+    role = "user"
   );
-  users.push(newUser);
-  const isSuccess = writeIntoFile(users);
+  const isSuccess = postUser(newUser);
   if (!isSuccess) {
-    throw new HttpError("Problem writing into the file.")
+    throw new HttpError("Problem creating the user.")
   }
   return newUser;
 }
 
-function fullUpdate(id, data) {
-  const users = readFromFile();
-  if (!users) {
-    throw new ResourceNotFound("No existing users in the system.");
-  };
-  const { username, password, firstname, lastname } = data;
-  let updatedUser;
-  users.forEach((user) => {
-    if (id === user.id) {
-      user.username = username;
-      user.password = password;
-      user.firstname = firstname;
-      user.lastname = lastname;
-      user.role = "general_user"
-      updatedUser = user;
-    }
-  });
-  const isSuccess = writeIntoFile(users);
-  if (!isSuccess) {
-    throw new HttpError("Problem writing into the file.")
+async function fullUpdate(userId, data) {
+  const { email, username, password, firstname, lastname } = data;
+  if (!email || !username || !password || !firstname || !lastname) {
+    throw new BadRequest("Request body is not valid.");
   }
-  return updatedUser;
-}
-
-function partialUpdate(userId, data) {
-  const users = readFromFile();
-  if (!users) {
-    throw new ResourceNotFound("No existing users in the system.");
-  };
-  const userIndex = users.findIndex(user => user.id === userId);
-  if (userIndex === -1) {
+  const user = await findParticularUser(userId);
+  if (!user) {
     throw new ResourceNotFound("User Not Found.")
   }
 
-  users[userIndex] = {
-    ...users[userIndex],
-    ...data,
-  };
-  const isSuccess = writeIntoFile(users);
+  let updateValues = new User(
+    userId,
+    email,
+    username,
+    password,
+    firstname,
+    lastname,
+    role = "user"
+  );
+
+  const isSuccess = updateUser(userId, updateValues);
   if (!isSuccess) {
     throw new HttpError("Problem writing into the file.")
   }
-  return users[userIndex];
+  return updateValues;
 }
 
-function deleteUser(userId) {
-  const users = readFromFile();
-  if (!users) {
-    throw new ResourceNotFound("No existing users in the system.");
-  };
-  let deletedUser;
-  users.forEach((user) => {
-    if (userId === user.id) {
-      deletedUser = user;
-    }
-  });
-  if (!deletedUser) {
-    throw new ResourceNotFound("User Not Found.");
+async function partialUpdate(userId, data) {
+  const user = await findParticularUser(userId);
+  if (!user) {
+    throw new ResourceNotFound("User Not Found.")
   }
-  const remainingUsers = users.filter((user) => {
-    return user.id !== userId;
-  });
-  const isSuccess = writeIntoFile(remainingUsers);
+  const updateValues = { ...user, ...data };
+  const isSuccess = updateUser(userId, updateValues)
   if (!isSuccess) {
     throw new HttpError("Problem writing into the file.")
   }
-  return deletedUser;
+
+  const entries = Object.entries(updateValues); // converting object into array
+
+  const slicedValues = entries.slice(6); // sliced the array to take necessary values
+
+  const newChanges = Object.fromEntries(slicedValues); // convert the sliced array into object
+
+  return newChanges;
+}
+
+async function deleteUser(userId) {
+  const user = await findParticularUser(userId);
+  if (!user) {
+    throw new ResourceNotFound("User Not Found.")
+  }
+  const isSuccess = removeUser(userId);
+  if (!isSuccess) {
+    throw new HttpError("Problem writing into the file.")
+  }
+  return user;
 }
 
 module.exports = {

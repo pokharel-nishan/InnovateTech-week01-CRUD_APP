@@ -27,15 +27,10 @@ app.listen(port, async () => {
   console.log("App listening on port: ", port);
   try {
     console.log("Models:", sequelize.models); // Log all registered models
-    console.log(sequelize)
-    // await User.sync();
-    // await sequelize.authenticate()
-    await sequelize.sync({ force: true });
-    console.log("Database connected successfully.")
+    // await sequelize.sync({ force: true });
+    await sequelize.sync();
+    console.log("Database connected successfully.");
   } catch (err) {
-    console.log({
-      Msg: "Unable to connect to database. ",
-      Err: err.message,
-    });
+    console.error("Unable to connect to the database:", err.message);
   }
 });

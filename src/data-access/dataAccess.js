@@ -1,36 +1,69 @@
 const fs = require("fs");
 const path = require("path");
+const User = require("../models/userModel");
+const { ServerError } = require("../exceptions/exceptionHandlers");
 
-const dataFile = path.join(__dirname, "../data/users.json");
-
-function readFromFile() {
-  let userData;
+async function getAllUsers() {
   try {
-    userData = fs.readFileSync(dataFile, "utf-8");
-  } catch (err) {
-    console.log("Error: ", err.message);
-    return null;
+    const userData = await User.findAll();
+    return userData;
   }
-  const data = JSON.parse(userData);
-  return data;
-}
-// throw new error
-function writeIntoFile(users) {
-  const newUsers = JSON.stringify(users);
-  try {
-    fs.writeFileSync(dataFile, newUsers);
-  } catch (err) {
-    console.log(err.message);
-    return false;
+  catch (err) {
+    throw new ServerError(err.message)
   }
-  return true;
 }
 
-function seedFile() {
+async function findParticularUser(userId) {
+  try {
+    const user = await User.findOne({
+      where: {
+        userId
+      }
+    });
+    return user;
+  } catch (err) {
+    throw new ServerError(err.message);
+  }
+}
 
+async function postUser(user) {
+  try {
+    const newUser = await User.create(user);
+    return true
+  }
+  catch (err) {
+    throw new ServerError(err.message)
+  }
+}
+
+async function updateUser(userId, updateValues) {
+  try {
+    const updatedUser = await User.update(updateValues, {
+      where: {
+        userId
+      }
+    })
+    return true
+  }
+  catch (err) {
+    throw new ServerError(err.message)
+  }
+}
+
+async function removeUser(userId) {
+  try {
+    const isSuccess = await User.destroy({ where: { userId } })
+    return isSuccess;
+  }
+  catch (err) {
+    throw new ServerError(err.message)
+  }
 }
 
 module.exports = {
-  readFromFile,
-  writeIntoFile,
+  findParticularUser,
+  getAllUsers,
+  postUser,
+  updateUser,
+  removeUser
 };

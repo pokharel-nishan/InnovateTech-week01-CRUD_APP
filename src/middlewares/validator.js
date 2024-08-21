@@ -1,13 +1,19 @@
-const validate = validations => {
+const { BadRequest } = require("../exceptions/exceptionHandlers");
+
+const validate = (validations) => {
   return async (req, res, next) => {
-    for (const validation of validations) {
-      const error = await validation.run(req);
-      if (!error.isEmpty()) {
-        return res.status(400).json({ errors: error.array() });
+    try {
+      for (const validation of validations) {
+        const result = await validation.run(req);
+        if (!result.isEmpty()) {
+          return next(new BadRequest(result.array().map(error => error.msg).join(', ')));
+        }
       }
+      next();
+    } catch (err) {
+      next(err);
     }
-    next()
-  }
+  };
 }
 
 module.exports = validate;

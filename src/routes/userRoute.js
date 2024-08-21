@@ -11,7 +11,7 @@ userRouter.get('/', authorize([ROLES.ADMIN]), findAllUsers);
 
 userRouter.get('/:id', authorize([ROLES.ADMIN, ROLES.USER]), findParticularUser);
 
-userRouter.post('/', authorize([ROLES.USER]), createUserValidator, createUser);
+userRouter.post('/', authorize([ROLES.USER, ROLES.ADMIN]), createUserValidator, createUser);
 
 userRouter.put('/:id', authorize([ROLES.USER, ROLES.ADMIN]), fullUserUpdateValidator, fullUserUpdate);
 

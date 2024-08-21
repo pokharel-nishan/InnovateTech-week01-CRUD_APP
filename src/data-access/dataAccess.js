@@ -14,7 +14,7 @@ function readFromFile() {
   const data = JSON.parse(userData);
   return data;
 }
-
+// throw new error
 function writeIntoFile(users) {
   const newUsers = JSON.stringify(users);
   try {

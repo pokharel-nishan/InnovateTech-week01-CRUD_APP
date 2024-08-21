@@ -9,8 +9,7 @@ const validateProperty = [
     .isEmail()
     .withMessage("Enter valid email."),
   body("username")
-    .not()
-    .isEmpty()
+    .notEmpty()
     .withMessage("Username should not be empty.")
     .isLength({ min: 5 })
     .withMessage("Invalid Username. Minimum 5 characters is required."),

@@ -35,7 +35,8 @@ const partialUserUpdate = async (req, res) => {
 
 const removeUser = async (req, res) => {
   const userId = req.params.id;
-  return res.status(200).json(await deleteUser(userId));
+  const deletedUser = await deleteUser(userId);
+  return res.status(200).json(deletedUser);
 };
 
 module.exports = {

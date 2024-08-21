@@ -136,3 +136,11 @@ catch{
 
 // JSON parse in seeder file -> seed file validate 
 
+
+
+
+
+
+git revert -> 
+git reset 
+git patch 

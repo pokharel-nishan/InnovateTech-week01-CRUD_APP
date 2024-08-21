@@ -5,6 +5,7 @@ const validate = (validations) => {
     try {
       for (const validation of validations) {
         const result = await validation.run(req);
+        console.log(result);
         if (!result.isEmpty()) {
           return next(new BadRequest(result.array().map(error => error.msg).join(', ')));
         }

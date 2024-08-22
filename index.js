@@ -6,7 +6,6 @@ const auth = require("./src/middlewares/authentication");
 const userSeeder = require("./src/seeders/userSeeder");
 const globalExceptionHandler = require("./src/middlewares/globalExceptionHandler");
 const sequelize = require("./src/database/sequelizeInstance");
-const User = require("./src/models/userModel");
 const app = express();
 
 dotenv.config();
@@ -28,7 +27,7 @@ app.listen(port, async () => {
   try {
     console.log("Models:", sequelize.models); // Log all registered models
     // await sequelize.sync({ force: true });
-    await sequelize.sync();
+    await sequelize.sync({ force: true });
     console.log("Database connected successfully.");
   } catch (err) {
     console.error("Unable to connect to the database:", err.message);

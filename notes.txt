@@ -144,3 +144,24 @@ catch{
 git revert -> 
 git reset 
 git patch 
+
+
+
+
+-> error -> function wrapper -> next(error)
+promise.resolve(value).catch(err)=> next(error)
+
+-> validator -> object clone
+  array clone -> object clone -> ....perform operation
+  separate for fullupdate/createuser and separate for partial update
+
+-> mongoose start
+
+-> Typescript project setup
+
+
+
+
+-> process and thread in nodejs
+-> context switching
+-> 

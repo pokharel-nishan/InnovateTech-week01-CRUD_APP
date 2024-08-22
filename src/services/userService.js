@@ -88,7 +88,7 @@ async function partialUpdate(userId, data) {
   }
   if (data.password) {
     const password = data.password;
-    encryptedPassword = encrypt(password);
+    const encryptedPassword = encrypt(password);
     data.password = encryptedPassword;
   }
   const updateValues = { ...user, ...data };

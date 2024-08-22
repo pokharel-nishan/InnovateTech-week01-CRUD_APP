@@ -1,5 +1,3 @@
-const fs = require("fs");
-const path = require("path");
 const User = require("../models/userModel");
 const { ServerError } = require("../exceptions/exceptionHandlers");
 
@@ -27,7 +25,7 @@ async function findParticularUser(userId) {
 
 async function postUser(user) {
   try {
-    const newUser = await User.create(user);
+    await User.create(user);
     return true;
   } catch (err) {
     throw new ServerError(err.message);
@@ -36,7 +34,7 @@ async function postUser(user) {
 
 async function updateUser(userId, updateValues) {
   try {
-    const updatedUser = await User.update(updateValues, {
+    await User.update(updateValues, {
       where: {
         userId,
       },

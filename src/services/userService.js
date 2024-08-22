@@ -50,7 +50,7 @@ function addUser(userObj) {
   if (!isSuccess) {
     throw new HttpError("Problem creating the user.");
   }
-  return newUser;
+  return isSuccess;
 }
 
 async function fullUpdate(userId, data) {

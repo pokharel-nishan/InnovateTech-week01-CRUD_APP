@@ -3,7 +3,8 @@ const {
   ResourceNotFound,
   BadRequest,
 } = require("../exceptions/exceptionHandlers");
-const User = require("../models/userModel");
+// const User = require("../models/userModel");
+const User = require("../models/mongooseUserModel");
 const { compare } = require("../common/encryption");
 
 async function verifyAccess(credentials) {
@@ -11,9 +12,7 @@ async function verifyAccess(credentials) {
 
   console.log(username, password);
   const user = await User.findOne({
-    where: {
-      username,
-    },
+    username,
   });
   console.log(user);
   if (!user) {
@@ -30,7 +29,7 @@ async function verifyAccess(credentials) {
   console.log("Role: ", user.role);
 
   const payload = {
-    userId: user.id,
+    userId: user._id,
     role: user.role,
   };
 

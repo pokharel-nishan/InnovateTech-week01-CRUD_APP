@@ -160,7 +160,7 @@ promise.resolve(value).catch(err)=> next(error)
 -> Typescript project setup
 
 
-
+-> database seeder for initial project run
 
 -> process and thread in nodejs
 -> context switching

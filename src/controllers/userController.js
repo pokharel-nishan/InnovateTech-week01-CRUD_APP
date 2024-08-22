@@ -1,3 +1,4 @@
+const { BadRequest } = require("../exceptions/exceptionHandlers");
 const {
   fullUpdate,
   partialUpdate,

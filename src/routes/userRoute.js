@@ -14,39 +14,43 @@ const {
   fullUserUpdateValidator,
   partialUserUpdateValidator,
 } = require("../validator/userValidator");
+const handleAsync = require("../common/handleAsync");
 const userRouter = express.Router();
 
 // can access as per the roles
-// userRouter.get('/', auth, authorize(['admin', 'user']), findAllUsers);
-userRouter.get("/", authorize([ROLES.ADMIN]), findAllUsers);
+userRouter.get("/", authorize([ROLES.ADMIN]), handleAsync(findAllUsers));
 
 userRouter.get(
   "/:id",
   authorize([ROLES.ADMIN, ROLES.USER]),
-  findParticularUser,
+  handleAsync(findParticularUser),
 );
 
 userRouter.post(
   "/",
   authorize([ROLES.USER, ROLES.ADMIN]),
   createUserValidator,
-  createUser,
+  handleAsync(createUser),
 );
 
 userRouter.put(
   "/:id",
   authorize([ROLES.USER, ROLES.ADMIN]),
   fullUserUpdateValidator,
-  fullUserUpdate,
+  handleAsync(fullUserUpdate),
 );
 
 userRouter.patch(
   "/:id",
   authorize([ROLES.USER, ROLES.ADMIN]),
   partialUserUpdateValidator,
-  partialUserUpdate,
+  handleAsync(partialUserUpdate),
 );
 
-userRouter.delete("/:id", authorize([ROLES.ADMIN]), removeUser);
+userRouter.delete(
+  "/:id",
+  authorize([ROLES.ADMIN, ROLES.USER]),
+  handleAsync(removeUser),
+);
 
 module.exports = userRouter;

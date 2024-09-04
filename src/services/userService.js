@@ -44,6 +44,7 @@ function addUser(userObj) {
     encryptedPassword,
     firstname,
     lastname,
+    // eslint-disable-next-line no-undef
     (role = "user"),
   );
   const isSuccess = postUser(newUser);
@@ -71,6 +72,7 @@ async function fullUpdate(userId, data) {
     encryptedPassword,
     firstname,
     lastname,
+    // eslint-disable-next-line no-undef
     (role = "user"),
   );
 

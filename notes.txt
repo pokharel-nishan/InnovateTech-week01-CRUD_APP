@@ -98,7 +98,13 @@ ES6 vs common JS module
 - ES6 added functionalities 
 - CJS, AMD, UMD, ESM
 
+// rest api naming conventions.
+// file upload using multert
+// rpc, grpc
+// aws , s3, cloudfront 
+// database indexing
 
+// system design flow -> design pattern, database, storage, why? how others have implemented. 
 
 - clean services layer and throw custom exception
 - bcrypt 
@@ -165,3 +171,10 @@ promise.resolve(value).catch(err)=> next(error)
 -> process and thread in nodejs
 -> context switching
 -> 
+
+
+- file upload 
+
+- seed data from json to Mongodb database
+
+- rpc, grpc, cors, 

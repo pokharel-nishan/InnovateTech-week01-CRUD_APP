@@ -1,0 +1,13 @@
+socket, queuing, server event, webrtc, 
+
+logging
+
+
+cloud 
+
+
+legacy code 
+
+
+
+bcrypt, database connectivity, Swagger in express. 

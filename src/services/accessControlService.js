@@ -1,42 +1,42 @@
 const jwt = require("jsonwebtoken");
-const { readFromFile } = require("../data-access/dataAccess");
+const {
+  ResourceNotFound,
+  BadRequest,
+} = require("../exceptions/exceptionHandlers");
+// const User = require("../models/userModel");
+const User = require("../models/mongooseUserModel");
+const { compare } = require("../common/encryption");
 
-function verifyAccess(credentials) {
+async function verifyAccess(credentials) {
   const { username, password } = credentials;
 
-  const users = readFromFile();
-
-  const user = users.find(user => user.username === username);
-  console.log(user)
+  console.log(username, password);
+  const user = await User.findOne({
+    username,
+  });
+  console.log(user);
   if (!user) {
-    return {
-      success: false,
-      message: "Invalid Credentials. Please try again."
-    }
+    throw new ResourceNotFound("User does not exist.");
   }
 
-  if (user.password !== password) {
-    return {
-      success: false,
-      message: "Invalid Credentials. Please try again."
-    }
+  const isValidPassword = compare(password, user.password);
+  if (!isValidPassword) {
+    throw new BadRequest("Username and Password do not match.");
   }
 
   console.log(username, " : ", user.username);
   console.log(password, " : ", user.password);
-  console.log("Role: ", user.role)
+  console.log("Role: ", user.role);
 
   const payload = {
-    username: username,
-    role: user.role
+    userId: user._id,
+    role: user.role,
   };
 
   const SECRET_KEY = process.env.SECRET_KEY;
   const token = jwt.sign(payload, SECRET_KEY);
-
-  return {
-    success: true, data: token,
-  };
+  console.log(token);
+  return token;
 }
 
 module.exports = verifyAccess;

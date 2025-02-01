@@ -1,0 +1,180 @@
+- define roles in separate file for authorization
+- define higher order function which is a middleware generator, where we send array of roles
+function - return function, function should be middleware
+
+- rolesGuard([array with roles "", ""]) => return middleware function
+// global exception handler 
+
+- controllers
+- service 
+- data access layer
+
+
+// exception handler express -> error first callback (use) for handling error 
+- error handler middleware -> should catch all custom errors 
+
+// send empty array instead of error 
+
+
+// if (!user){
+  throw new error{
+    status: 234,
+    message: ""
+  }
+}
+
+if status -> status 
+if not status -> status 500 in default
+
+// if error -> handle with error handler middleware
+
+
+
+// if there is not data then we do not need to send the error in if(!users)
+
+
+// if there is no json file, then use seeder to seed the data in json file
+// if there is no array in json file, then also use the seeder
+
+
+// follow branching in git
+// prefix for branch: day or week in branch and then name
+
+// handle the error when reading the file and not when after reading the file
+
+
+// data access layer
+
+
+// validation middleware 
+-> express validator 
+-> non necessary data/properties in body 
+
+
+
+// authorize => generate middleware
+
+throw new error({
+  status:
+  message: 
+})
+
+// class unauthorizedException extends Error{
+  constructor(message){
+
+  }
+}
+
+throw new unauth..("User is not authorized...")
+
+
+
+// bcrypt hash -> hash in seeder file also
+// use bcrypt for password hashing 
+
+
+
+// OOP  (Maintain docs)
+// Typescript - OOP concepts 
+- Extends vs implement
+- type vs interface 
+- Enum 
+- Utility functions
+- 
+- MVC architecture
+
+- JWT vs session 
+- Stateful and stateless backend systems. 
+
+
+- socket and queuing
+- ORM 
+- RPC  
+
+- socket -> full flow, full description. 
+
+ES6 vs common JS module
+- imports vs require
+- ES6 added functionalities 
+- CJS, AMD, UMD, ESM
+
+// rest api naming conventions.
+// file upload using multert
+// rpc, grpc
+// aws , s3, cloudfront 
+// database indexing
+
+// system design flow -> design pattern, database, storage, why? how others have implemented. 
+
+- clean services layer and throw custom exception
+- bcrypt 
+- Database connectivity 
+
+- jsdocs - swagger. 
+- swagger express UI 
+
+
+if username not found{
+- return {
+  status: 
+  message: 
+}
+}
+
+throw new notFoundException();
+
+
+- exception 
+
+- if I am a user, I only should be able to update my data. 
+
+
+
+- dto -> getter method -> get user full name 
+
+
+- try{
+
+}
+catch{
+
+}
+
+// JSON parse in seeder file -> seed file validate 
+
+
+
+
+
+
+git revert -> 
+git reset 
+git patch 
+
+
+
+
+-> error -> function wrapper -> next(error)
+promise.resolve(value).catch(err)=> next(error)
+
+-> validator -> object clone
+  array clone -> object clone -> ....perform operation
+  separate for fullupdate/createuser and separate for partial update
+
+-> mongoose start
+
+-> Typescript project setup
+
+
+-> database seeder for initial project run
+
+-> process and thread in nodejs
+-> context switching
+-> 
+
+
+- file upload 
+
+- seed data from json to Mongodb database
+
+- rpc, grpc, cors, 

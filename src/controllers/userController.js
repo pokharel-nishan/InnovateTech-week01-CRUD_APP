@@ -1,3 +1,4 @@
+const { BadRequest } = require("../exceptions/exceptionHandlers");
 const {
   fullUpdate,
   partialUpdate,
@@ -7,59 +8,36 @@ const {
   deleteUser,
 } = require("../services/userService");
 
-const findAllUsers = (req, res) => {
-  const result = getUsers();
-  if (result.success) {
-    return res.status(200).json(result.data)
-  }
-  return res.status(404).json({ Message: result.message })
+const findAllUsers = async (req, res) => {
+  return res.status(200).json(await getUsers());
 };
 
-const findParticularUser = (req, res) => {
+const findParticularUser = async (req, res) => {
   const id = req.params.id;
-  const result = getParticularUser(id);
-  if (result.success) {
-    return res.status(200).json(result.data)
-  }
-  return res.status(404).json({ Message: result.message })
+  return res.status(200).json(await getParticularUser(id));
 };
 
-const createUser = (req, res) => {
+const createUser = async (req, res) => {
   const userObj = req.body;
-  const result = addUser(userObj);
-  if (result.success) {
-    return res.status(200).json(result.data)
-  }
-  return res.status(404).json({ Message: result.message })
+  return res.status(200).json(await addUser(userObj));
 };
 
-const fullUserUpdate = (req, res) => {
+const fullUserUpdate = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
-  const result = fullUpdate(id, data);
-  if (result.success) {
-    return res.status(200).json(result.data)
-  }
-  return res.status(404).json({ Message: result.message });
+  return res.status(200).json(await fullUpdate(id, data));
 };
 
-const partialUserUpdate = (req, res) => {
+const partialUserUpdate = async (req, res) => {
   const id = req.params.id;
   const data = req.body;
-  const result = partialUpdate(id, data);
-  if (result.success) {
-    return res.status(200).json(result.data)
-  }
-  return res.status(404).json({ Message: result.message });
+  return res.status(200).json(await partialUpdate(id, data));
 };
 
-const removeUser = (req, res) => {
+const removeUser = async (req, res) => {
   const userId = req.params.id;
-  const result = deleteUser(userId);
-  if (result.success) {
-    return res.status(200).json(result.data)
-  }
-  return res.status(404).json({ Message: result.message })
+  const deletedUser = await deleteUser(userId);
+  return res.status(200).json(deletedUser);
 };
 
 module.exports = {
@@ -70,58 +48,3 @@ module.exports = {
   partialUserUpdate,
   removeUser,
 };
-
-/*
-const {
-  fullUpdate,
-  partialUpdate,
-  getUsers,
-  getParticularUser,
-  addUser,
-  deleteUser,
-} = require("../services/userService");
-
-const findAllUsers = (req, res) => {
-  const result = getUsers();
-  if (result.success) {
-    return res.status(200).json(result.data)
-  }
-  return res.status(404).json(result.Message)
-};
-
-const findParticularUser = (req, res) => {
-  const id = req.params.id;
-  return getParticularUser(id);
-};
-
-const createUser = (req, res) => {
-  const userObj = req.body;
-  return addUser(userObj);
-};
-
-const fullUserUpdate = (req, res) => {
-  const id = req.params.id;
-  const data = req.body;
-  return fullUpdate(id, data);
-};
-
-const partialUserUpdate = (req, res) => {
-  const id = req.params.id;
-  const data = req.body;
-  return partialUpdate(id, data);
-};
-
-const removeUser = (req, res) => {
-  const userId = req.params.id;
-  return deleteUser(userId);
-};
-
-module.exports = {
-  findAllUsers,
-  findParticularUser,
-  createUser,
-  fullUserUpdate,
-  partialUserUpdate,
-  removeUser,
-};
-*/

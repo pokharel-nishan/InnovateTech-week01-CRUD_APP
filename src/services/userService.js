@@ -1,290 +1,123 @@
 const { v4: uuid } = require("uuid");
 const User = require("../dto/user");
-const { readFromFile, writeIntoFile } = require("../data-access/dataAccess");
+const {
+  getAllUsers,
+  postUser,
+  findParticularUser,
+  updateUser,
+  removeUser,
+} = require("../data-access/dataAccess");
+const {
+  ResourceNotFound,
+  HttpError,
+  BadRequest,
+} = require("../exceptions/exceptionHandlers");
+const { encrypt } = require("../common/encryption");
 
-function getUsers() {
-  const users = readFromFile();
-  if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
+async function getUsers() {
+  const users = await getAllUsers();
+  if (Object.keys(users).length === 0) {
+    throw new ResourceNotFound("No existing users in the system.");
   }
-  return { success: true, data: users };
+  return users;
 }
 
-function getParticularUser(userId) {
-  const users = readFromFile();
-  if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
-  }
-  const user = users.find(user => user.id === userId);
+async function getParticularUser(userId) {
+  const user = await findParticularUser(userId);
   if (user) {
-    return { success: true, data: user };
+    return user;
   }
-  return {
-    success: false,
-    message: "User not found.",
-  };
+  throw new ResourceNotFound("User Not Found.");
 }
 
 function addUser(userObj) {
-  let users = readFromFile();
-  if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
+  const { email, username, password, firstname, lastname } = userObj;
+  if (!email || !username || !password || !firstname || !lastname) {
+    throw new BadRequest("Request body is not valid.");
   }
-  const { username, password, firstname, lastname } = userObj;
+  const encryptedPassword = encrypt(password);
+  const userId = uuid();
   let newUser = new User(
-    (id = uuid()),
+    userId,
+    email,
     username,
-    password,
+    encryptedPassword,
     firstname,
     lastname,
-    role = "user"
+    // eslint-disable-next-line no-undef
+    (role = "user"),
   );
-  users.push(newUser);
-  const isSuccess = writeIntoFile(users);
+  const isSuccess = postUser(newUser);
   if (!isSuccess) {
-    return {
-      success: false,
-      message: "Error occurred while creating user. Please try again.",
-    };
+    throw new HttpError("Problem creating the user.");
   }
-  return { success: true, data: newUser };
+  return isSuccess;
 }
 
-function fullUpdate(id, data) {
-  const users = readFromFile();
-  if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
+async function fullUpdate(userId, data) {
+  const { email, username, password, firstname, lastname } = data;
+  if (!email || !username || !password || !firstname || !lastname) {
+    throw new BadRequest("Request body is not valid.");
   }
-  const { username, password, firstname, lastname } = data;
-  let updatedUser;
-  users.forEach((user) => {
-    if (id === user.id) {
-      user.username = username;
-      user.password = password;
-      user.firstname = firstname;
-      user.lastname = lastname;
-      user.role = "user"
-      updatedUser = user;
-    }
-  });
-  const isSuccess = writeIntoFile(users);
-  if (!isSuccess) {
-    return {
-      success: false,
-      message: "Error occurred while updating user. Please try again.",
-    };
-  }
-  return { success: true, data: updatedUser };
-}
-
-function partialUpdate(userId, data) {
-  const users = readFromFile();
-  if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
-  }
-  const userIndex = users.findIndex(user => user.id === userId);
-  if (userIndex === -1) {
-    return {
-      success: false,
-      message: "User not found.",
-    };
+  const user = await findParticularUser(userId);
+  if (!user) {
+    throw new ResourceNotFound("User Not Found.");
   }
 
-  users[userIndex] = {
-    ...users[userIndex],
-    ...data,
-  };
-  const isSuccess = writeIntoFile(users);
-  if (!isSuccess) {
-    return {
-      success: false,
-      message: "Error occurred while updating user. Please try again.",
-    };
-  }
-  return { success: true, data: users[userIndex] };
-}
-
-function deleteUser(userId) {
-  const users = readFromFile();
-  if (!users) {
-    return {
-      success: false,
-      message: "Error occurred while reading data. Please try again.",
-    };
-  }
-  let deletedUser;
-  users.forEach((user) => {
-    if (userId === user.id) {
-      deletedUser = user;
-    }
-  });
-  if (!deletedUser) {
-    return {
-      success: false,
-      message: "User does not exist.",
-    };
-  }
-  const remainingUsers = users.filter((user) => {
-    return user.id !== userId;
-  });
-  const isSuccess = writeIntoFile(remainingUsers);
-  if (!isSuccess) {
-    return {
-      success: false,
-      message: "Error occurred while deleting user. Please try again.",
-    };
-  }
-  return { success: true, data: deletedUser };
-}
-
-module.exports = {
-  getUsers,
-  getParticularUser,
-  addUser,
-  fullUpdate,
-  partialUpdate,
-  deleteUser,
-};
-
-/*
-const { v4: uuid } = require("uuid");
-const User = require("../dto/user");
-const { readFromFile, writeIntoFile } = require("../data-access/dataAccess");
-
-function getUsers() {
-  const users = readFromFile();
-  if (!users) {
-    return { success: false, message: "Error occurred while reading data. Please try again." }
-  }
-  return { success: true, data: users }
-}
-
-function getParticularUser(id) {
-  const users = readFromFile();
-  if (!users) {
-    return res.status(404).json({
-      Message: "Error occurred while reading data. Please try again.",
-    });
-  }
-  users.forEach((user) => {
-    if (id === user.id) {
-      return res.status(200).json(user);
-    }
-  });
-  return res.json({ Messsage: "User not found" });
-}
-
-function addUser(userObj) {
-  let users = readFromFile();
-  if (!users) {
-    return res.status(404).json({
-      Message: "Error occurred while reading data. Please try again.",
-    });
-  }
-  const { username, password, firstname, lastname } = userObj;
-  let newUser = new User(
-    (id = uuid()),
+  const encryptedPassword = encrypt(password);
+  let updateValues = new User(
+    userId,
+    email,
     username,
-    password,
+    encryptedPassword,
     firstname,
-    lastname
+    lastname,
+    // eslint-disable-next-line no-undef
+    (role = "user"),
   );
-  users.push(newUser);
-  const isSuccess = writeIntoFile(users);
+
+  const isSuccess = updateUser(userId, updateValues);
   if (!isSuccess) {
-    return res.status(404).json({
-      Message: "Error occurred while creating user. Please try again.",
-    });
+    throw new HttpError("Problem writing into the file.");
   }
-  return res
-    .status(201)
-    .json({ message: "User successfully created.", "User ": saveUser });
+  return updateValues;
 }
 
-function fullUpdate(id, data) {
-  const users = readFromFile();
-  if (!users) {
-    return res.status(404).json({
-      Message: "Error occurred while reading data. Please try again.",
-    });
+async function partialUpdate(userId, data) {
+  const user = await findParticularUser(userId);
+  if (!user) {
+    throw new ResourceNotFound("User Not Found.");
   }
-  const { username, password, firstname, lastname } = data;
-  let updatedUser;
-  users.forEach((user) => {
-    if (id === user.id) {
-      user.username = username;
-      user.password = password;
-      user.firstname = firstname;
-      user.lastname = lastname;
-      updatedUser = user;
-    }
-  });
-  const isSuccess = writeIntoFile(users);
+  if (data.password) {
+    const password = data.password;
+    const encryptedPassword = encrypt(password);
+    data.password = encryptedPassword;
+  }
+  const updateValues = { ...user, ...data };
+  const isSuccess = updateUser(userId, updateValues);
   if (!isSuccess) {
-    return res.status(404).json({
-      Message: "Error occurred when updating user. Please try again.",
-    });
+    throw new HttpError("Problem writing into the file.");
   }
-  return res.status(200).json(updatedUser);
+
+  const entries = Object.entries(updateValues); // converting object into array
+
+  const slicedValues = entries.slice(6); // sliced the array to take necessary values
+
+  const newChanges = Object.fromEntries(slicedValues); // convert the sliced array into object
+
+  return newChanges;
 }
 
-function partialUpdate(id, data) {
-  const users = readFromFile();
-  if (!users) {
-    return res.status(404).json({
-      Message: "Error occurred while reading data. Please try again.",
-    });
+async function deleteUser(userId) {
+  const user = await findParticularUser(userId);
+  if (!user) {
+    throw new ResourceNotFound("User Not Found.");
   }
-  let updatedUser;
-  users.forEach((user) => {
-    if (id === user.id) {
-      updatedUser = {
-        ...user,
-        ...data,
-      };
-    }
-  });
-  const isSuccess = writeIntoFile(users);
+  const isSuccess = removeUser(userId);
   if (!isSuccess) {
-    return res.status(404).json({
-      Message: "Error occurred when updating user. Please try again.",
-    });
+    throw new HttpError("Problem deleting the user.");
   }
-  return res.status(200).json(updatedUser);
-}
-
-function deleteUser(id) {
-  const users = readFromFile();
-  if (!users) {
-    return res.status(404).json({
-      Message: "Error occurred while reading data. Please try again.",
-    });
-  }
-  const updatedUsers = users.filter((user) => {
-    return user.id !== userId;
-  });
-  const isSuccess = writeIntoFile(updatedUsers);
-  if (!isSuccess) {
-    return res.status(404).json({
-      Message: "Error occurred when deleting user. Please try again.",
-    });
-  }
-  return res.status(200).json({ Messsage: "User is successfully deleted." });
+  return user;
 }
 
 module.exports = {
@@ -295,5 +128,3 @@ module.exports = {
   partialUpdate,
   deleteUser,
 };
-
-*/

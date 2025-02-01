@@ -8,6 +8,14 @@
     "role": "admin"
   },
   {
+    "id": "9472d87c-c21d-486b-9877-f51cbc7e53a2",
+    "username": "krishna",
+    "password": "radha",
+    "firstname": "shree",
+    "lastname": "krishna",
+    "role": "admin"
+  },
+  {
     "id": "1eea17ed-b7d6-4d42-aa28-c713b952e891",
     "username": "user",
     "password": "user",
@@ -29,14 +37,6 @@
     "password": "shyam",
     "firstname": "ram",
     "lastname": "shyam",
-    "role": "general_user"
-  },
-  {
-    "id": "2ea64f02-bcab-4f2d-9da0-b13122cf19ce",
-    "username": "Shyam",
-    "password": "shyam12",
-    "firstname": "ddff",
-    "lastname": "abdfcd",
     "role": "general_user"
   }
 ]
